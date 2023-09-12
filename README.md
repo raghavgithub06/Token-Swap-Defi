@@ -1,45 +1,54 @@
-# UNISWAP-DEFI
+# Token Swap
 
-The Liquidity Examples Solidity smart contract provides various functions to interact with the Uniswap V3 liquidity pool. It allows users to create, manage, and collect fees from liquidity positions in the pool. The contract uses the Uniswap V3 core and periphery contracts, as well as OpenZeppelin ERC721 receiver interface for NFT handling.
+This is a simple Ethereum smart contract for creating an exchange where users can add liquidity, swap Ether for tokens, and swap tokens for Ether. The contract allows users to add liquidity to the exchange pool and swap between Ether and an ERC20 token.
 
-## Contract Details
+## Features
 
-- **License**: GPL-2.0-or-later
-- **Solidity Version Compatibility**: >=0.7.6 < 0.9.0
-- **Abi Coder Version**: 2
+- Add liquidity to the exchange.
+- Swap Ether for tokens.
+- Swap tokens for Ether.
+- View the total supply of the ERC20 token.
+- Get the address of the ERC20 token.
+- Check the token and Ether reserves in the contract.
 
-## State Variables
+## Getting Started
 
-- `DAI` (address): The address of the DAI token.
-- `USDC` (address): The address of the USDC token.
-- `poolFee` (uint24): The pool fee represented as a percentage (0.01% in this case).
-- `nonfungiblePositionManager` (INonfungiblePositionManager): The Uniswap V3 nonfungible position manager contract used to interact with liquidity positions.
-- `tokenId` (uint): The token ID used in this example.
+### Prerequisites
 
-## Struct
+- You should have an Ethereum development environment set up.
+- The contract uses the OpenZeppelin ERC20 interface, so make sure you have OpenZeppelin installed in your project.
 
-- `Deposit`: Represents the deposit of an NFT. It contains the following fields:
-  - `owner` (address): The address of the owner of the NFT.
-  - `liquidity` (uint128): The liquidity amount of the NFT.
-  - `token0` (address): The address of token0 in the liquidity position.
-  - `token1` (address): The address of token1 in the liquidity position.
+### Deployment
 
-## Functions
+1. Deploy the contract to an Ethereum network, passing the address of the ERC20 token as a constructor parameter.
 
-1. `onERC721Received`: Implements the ERC721 receiver interface to receive custody of ERC721 tokens. It creates a deposit for the received NFT.
+constructor (address _tokenAddress) {
+    require(_tokenAddress != address(0), "address(0) cannot be used");
+    tokenAddress = _tokenAddress;
+}
 
-2. `_createDeposit`: Internal function to create a deposit for an NFT. It stores the NFT's details in the `deposits` mapping.
+## Usage
 
-3. `mintNewPosition`: Creates a new liquidity position by minting NFTs representing liquidity in the Uniswap V3 pool.
+The contract provides the following functions:
 
-4. `collectAllFees`: Collects all fees earned from the liquidity position represented by the specified token ID.
+- **getTotalSupplyOfToken**: Returns the total supply of the ERC20 token.
 
-5. `increaseLiquidityCurrentRange`: Increases liquidity in the current tick range for the liquidity position represented by the specified token ID.
+- **getTokenAddress**: Returns the address of the ERC20 token.
 
-6. `getLiquidity`: Returns the liquidity amount for the specified token ID.
+- **addLiquidity(uint _tokenAmount)**: Adds liquidity to the exchange by sending tokens to the contract and receiving Ether. The exchange rate is initially set to 1 Ether for 10,000 tokens.
 
-7. `decreaseLiquidity`: Decreases liquidity for the liquidity position represented by the specified token ID.
+- **changeEtherToToken()**: Swaps Ether for tokens based on the current exchange rate.
 
-## Note
+- **changeTokenToEther(uint _inputTokenAmount)**: Swaps tokens for Ether based on the current exchange rate.
 
-This documentation provides an overview of the Liquidity Examples smart contract and its functionalities. Before deploying or interacting with any smart contract, it is crucial to conduct a thorough code review, audit the contract's security, and understand the implications of each function. The contract uses the Uniswap V3 core and periphery contracts, and it references the DAI and USDC tokens, which should be properly verified for use.
+- **getTokenReserve**: Returns the token reserve in the contract.
+
+- **getEtherReserve**: Returns the Ether reserve in the contract.
+
+- **getTokenAmount(uint _inputEthAmount, uint EthReserve, uint tokenReserve)**: Calculates the amount of tokens that will be received for a given amount of Ether.
+
+- **getEtherAmount(uint _inputTokenAmount, uint tokenReserve, uint EthReserve)**: Calculates the amount of Ether that will be received for a given amount of tokens.
+
+## License
+
+This smart contract is open-source software licensed under the GPL-3.0 License.
